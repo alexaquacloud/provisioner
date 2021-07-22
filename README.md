@@ -41,4 +41,5 @@ Project settings -> Secret -> Create secret
 
 4. Go to `Actions` tab and press something like 'Yes, I see, this repo is good, activate it please'
 
-5. Go to 'CreateAzureVM' workflow -> CreateVM job and press 'run'
+5. Go to `Actions` -> `CreateAzureVM` workflow -> `run workflow`
+![image](https://user-images.githubusercontent.com/87818818/126694569-b23d62cc-14b3-4654-a889-04acd2588cfa.png)
