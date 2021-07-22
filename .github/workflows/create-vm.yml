@@ -1,10 +1,14 @@
-on: [push]
+on: workflow_dispatch
 
 name: CreateAzureVM
 
 jobs:
 
   build-and-deploy:
+    env:
+      AZURE_VM_RG: testRG
+      AZURE_VM_NAME: win-vm
+
     runs-on: ubuntu-latest
     steps:
 
@@ -12,5 +16,24 @@ jobs:
       with:
         creds: ${{ secrets.AZURE_CREDENTIALS }}
 
+    - uses: actions/checkout@v2
+
+    - run: pip install ansible pywinrm winrm
+
+    - run: wget -nv -q https://raw.githubusercontent.com/ansible-collections/azure/dev/requirements-azure.txt
+
+    - run: pip install -r requirements-azure.txt
+
+    - uses: dawidd6/action-ansible-playbook@v2
+      env:
+        AZURE_VM_PASS: ${{ secrets.AZURE_VM_PASS }}
+      with:
+        playbook: vm.yml
+        directory: ./
+        options: |
+          --verbose
+
     - run: |
-        az vm list
+        ansible-playbook vm-install.yml -i $(az vm show -d -g $AZURE_VM_RG -n $AZURE_VM_NAME --query publicIps -o tsv),
+      env:
+        AZURE_VM_PASS: ${{ secrets.AZURE_VM_PASS }}

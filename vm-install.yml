@@ -1,0 +1,17 @@
+- hosts: all
+  vars:
+    ansible_user: azureuser
+    ansible_connection: winrm
+    ansible_winrm_transport: ntlm
+    ansible_winrm_server_cert_validation: ignore
+    ansible_password:  "{{ lookup('env', 'AZURE_VM_PASS') }}"
+  tasks:
+
+  - name: Test connection
+    win_ping:
+  
+  - name: Install choco
+    win_shell: Set-ExecutionPolicy Bypass -Scope Process -Force; [System.Net.ServicePointManager]::SecurityProtocol = [System.Net.ServicePointManager]::SecurityProtocol -bor 3072; iex ((New-Object System.Net.WebClient).DownloadString('https://chocolatey.org/install.ps1'))
+
+  - name: Install notepad++
+    win_shell: choco install notepadplusplus -y
