@@ -4,11 +4,6 @@
   connection: local
   tasks:
 
-  - name: Create resource group
-    azure_rm_resourcegroup:
-      name: "{{ lookup('env', 'AZURE_VM_RG') }}"
-      location: eastus
-
   - name: Create virtual network
     azure_rm_virtualnetwork:
       resource_group: "{{ lookup('env', 'AZURE_VM_RG') }}"
